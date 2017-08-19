@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace CollectionData
@@ -29,6 +31,7 @@ namespace CollectionData
         //初始化浏览器
         public void initBrowser()
         {
+            //阻止脚本错误提示
             webBrowser.ScriptErrorsSuppressed = true;
             webBrowser.Navigate("http://js.ntwikis.com");
         }
@@ -45,7 +48,7 @@ namespace CollectionData
             dataGridView.Columns[4].Visible = false;
             dataGridView.Columns[5].Visible = false;
             dataGridView.Columns[6].HeaderText = "备注";
-            for (int i = 0; i < dataGridView.ColumnCount - 1; i++)
+            for (int i = 0; i < dataGridView.ColumnCount; i++)
             {
                 dataGridView.Columns[i].ReadOnly = true;
             }
@@ -81,14 +84,14 @@ namespace CollectionData
             }
             if (showRetrofitedFlag == 1)
             {
-                checkBox1.Checked = true;
+                showRetroCheckBox.Checked = true;
                 retrofitedFilterStr = "";
                 totalCount = dt.Select("IsIgnored = 0 ").Length;
                 ownedCount = dt.Select("IsIgnored = 0 and IsOwned = 1").Length;
             }
             else
             {
-                checkBox1.Checked = false;
+                showRetroCheckBox.Checked = false;
                 retrofitedFilterStr = " and IsRetrofited = 0";
                 totalCount = dt.Select("IsIgnored = 0 and IsRetrofited = 0").Length;
                 ownedCount = dt.Select("IsIgnored = 0 and IsRetrofited = 0 and IsOwned = 1").Length;
@@ -108,7 +111,7 @@ namespace CollectionData
             {
                 countTextBox.Text = "0/0,0%";
             }
-            dataGridView.AutoResizeColumns();
+            reSizeColumns();
             dataGridView.AutoResizeRows();
         }
 
@@ -118,20 +121,19 @@ namespace CollectionData
             string appName = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             string xPoint = this.Location.X.ToString();
             string yPoint = this.Location.Y.ToString();
-            string showRetrofitedFlag = checkBox1.Checked ? "1" : "0";
+            string showRetrofitedFlag = showRetroCheckBox.Checked ? "1" : "0";
             string height = this.Height.ToString();
             string width = this.Width.ToString();
-            string configItems = "appName=" + appName + "\0"
-            + "LocationX=" + xPoint + "\0"
-            + "LocationY=" + yPoint + "\0"
-            + "ShowRetrofitedFlag=" + showRetrofitedFlag + "\0"
-            + "Sizable=" + sizable + "\0"
-            + "Height=" + height + "\0"
-            + "Width=" + width + "\0"
-            + "CheckUpdate=" + checkUpdateFlag;
-
+            OperateIniFile.iniWriteValue(configPath, "Settings", "appName", appName);
+            OperateIniFile.iniWriteValue(configPath, "Settings", "ShowRetrofitedFlag", showRetrofitedFlag);
+            OperateIniFile.iniWriteValue(configPath, "Settings", "LocationX", xPoint);
+            OperateIniFile.iniWriteValue(configPath, "Settings", "LocationY", yPoint);
+            OperateIniFile.iniWriteValue(configPath, "Settings", "Height", height);
+            OperateIniFile.iniWriteValue(configPath, "Settings", "Width", width);
+            OperateIniFile.iniWriteValue(configPath, "Settings", "Sizable", sizable);
+            OperateIniFile.iniWriteValue(configPath, "Settings", "CheckUpdate", checkUpdateFlag);
             WriteData.reWriteData(dataPath, dt);
-            OperateIniFile.iniWriteItems(configPath, "Settings", configItems);
+
         }
         //禁止访问其他网站
         private void webBrowser_Navigated(object sender, WebBrowserNavigatedEventArgs e)
@@ -147,28 +149,28 @@ namespace CollectionData
         }
 
         //更改表格显示内容
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        private void showAllRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ownedFilterStr = "IsIgnored = 0";
             dv.RowFilter = ownedFilterStr + retrofitedFilterStr + searchFilterStr;
-            dataGridView.AutoResizeColumns();
+            reSizeColumns();
         }
-        private void radioButton2_CheckedChanged(object sender, EventArgs e)
+        private void showOwnedRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ownedFilterStr = "IsIgnored = 0 and IsOwned = 1";
             dv.RowFilter = ownedFilterStr + retrofitedFilterStr + searchFilterStr;
-            dataGridView.AutoResizeColumns();
+            reSizeColumns();
         }
-        private void radioButton3_CheckedChanged(object sender, EventArgs e)
+        private void showUnownedRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ownedFilterStr = "IsIgnored = 0 and IsOwned = 0";
             dv.RowFilter = ownedFilterStr + retrofitedFilterStr + searchFilterStr;
-            dataGridView.AutoResizeColumns();
+            reSizeColumns();
         }
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void showRetroCheckBox_CheckedChanged(object sender, EventArgs e)
         {
             decimal totalCount = 0, ownedCount = 0;
-            if (checkBox1.Checked)
+            if (showRetroCheckBox.Checked)
             {
                 retrofitedFilterStr = "";
                 totalCount = dt.Select("IsIgnored = 0 ").Length;
@@ -189,7 +191,7 @@ namespace CollectionData
                 countTextBox.Text = "0/0,0%";
             }
             dv.RowFilter = ownedFilterStr + retrofitedFilterStr + searchFilterStr;
-            dataGridView.AutoResizeColumns();
+            reSizeColumns();
         }
         //搜索
         private void searchTextBox_TextChanged(object sender, EventArgs e)
@@ -216,7 +218,7 @@ namespace CollectionData
                 {
                     dv.Sort = " ID asc";
                     decimal totalCount = 0, ownedCount = 0;
-                    if (checkBox1.Checked)
+                    if (showRetroCheckBox.Checked)
                     {
                         totalCount = dt.Select("IsIgnored = 0 ").Length;
                         ownedCount = dt.Select("IsIgnored = 0 and IsOwned = 1").Length;
@@ -323,22 +325,42 @@ namespace CollectionData
         {
             try
             {
+                dataGridView.SelectedRows[0].Selected = true;
+                List<int> l = new List<int>();
+                for(int i=1;i< dataGridView.SelectedRows.Count;i++)
+                {
+                    l.Add(dataGridView.SelectedRows[i].Index);
+                }
+                foreach(int i in l)
+                {
+                    dataGridView.Rows[i].Selected = false;
+                }
+                string id = dataGridView.SelectedRows[0].Cells[0].Value.ToString();
+                if (int.Parse(id) > 1000 && int.Parse(id) < 2000)
+                {
+                    MessageBox.Show("该舰为改造获得！");
+                    return;
+                }
                 DialogResult dr = MessageBox.Show("该操作可能花费较长时间，确认继续吗？", "提示", MessageBoxButtons.OKCancel);
                 if (dr == DialogResult.OK)
                 {
-                    string id = dataGridView.SelectedRows[0].Cells[0].Value.ToString();
                     FindDropPoint fdp = new FindDropPoint();
                     string dropPoints = fdp.DropPoints(id);
+
                     if (dropPoints == "")
                     {
-                        MessageBox.Show("该舰为建造限定！");
+                        MessageBox.Show("该舰暂时无法通过打捞获得！");
                     }
                     else
                     {
                         DialogResult dr2 = MessageBox.Show(dropPoints, "是否需要写入备注", MessageBoxButtons.OKCancel);
-                        if (dr == DialogResult.OK)
+                        if (dr2 == DialogResult.OK)
                         {
-                            dropPoints = System.Text.RegularExpressions.Regex.Replace(dropPoints, "\n", "");
+                            dropPoints = Regex.Replace(dropPoints, "\n", "\t");
+                            if (dataGridView.SelectedRows[0].Cells[6].Value.ToString().Trim() != "")
+                            {
+                                dataGridView.SelectedRows[0].Cells[6].Value += "\t";
+                            }
                             dataGridView.SelectedRows[0].Cells[6].Value += dropPoints;
                         }
                     }
@@ -350,5 +372,37 @@ namespace CollectionData
             }
         }
 
+        #region 自动调整窗口
+        private void reSizeColumns()
+        {
+            
+            dataGridView.AutoResizeColumns();
+        }
+        #endregion
+
+        #region 窗体传值
+
+        private int cellPos = 0;
+        public string remarkFormString
+        {
+            set
+            {
+                dataGridView.Rows[cellPos].Cells[dataGridView.ColumnCount - 1].Value = value;
+            }
+        }
+        private void dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            int columnIndex = dataGridView.ColumnCount - 1;
+            int rowIndex = e.RowIndex;
+            RemarkForm remarkForm = new RemarkForm();
+            remarkForm.Owner = this;
+            string inStr = dataGridView.Rows[rowIndex].Cells[columnIndex].Value.ToString();
+            inStr = Regex.Replace(inStr, "\\t", "\r\n");
+            remarkForm.remarkStr = inStr;
+            cellPos = rowIndex;
+            remarkForm.ShowDialog();
+        }
+
+        #endregion
     }
 }

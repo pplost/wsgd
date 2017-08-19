@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CollectionData
@@ -21,7 +22,7 @@ namespace CollectionData
                 {
                     for(int j=0;j<dt.Columns.Count;j++)
                     {
-                        text += dt.Rows[i][j].ToString().Replace('\t', ' ') + "\t";
+                        text += Regex.Replace(dt.Rows[i][j].ToString(), "\t", "\\n") + "\t";
                     }
                     text += "\n";
                 }

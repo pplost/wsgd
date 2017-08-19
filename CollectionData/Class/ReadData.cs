@@ -2,6 +2,7 @@
 using System.Data;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 
 
 namespace CollectionData
@@ -44,7 +45,7 @@ namespace CollectionData
                             //dr[i] = strArray[i];
                             try
                             {
-                                dr[i] = strArray[i];
+                                dr[i] = Regex.Replace(strArray[i], "\\\\n", "\t");
                             }
                             catch
                             {

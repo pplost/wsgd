@@ -33,10 +33,10 @@ namespace CollectionData
             this.webBrowser = new System.Windows.Forms.WebBrowser();
             this.modifyButton = new System.Windows.Forms.Button();
             this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.showRetroCheckBox = new System.Windows.Forms.CheckBox();
+            this.showUnownedRadioButton = new System.Windows.Forms.RadioButton();
+            this.showOwnedRadioButton = new System.Windows.Forms.RadioButton();
+            this.showAllRadioButton = new System.Windows.Forms.RadioButton();
             this.checkUpdateButton = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.searchTextBox = new System.Windows.Forms.TextBox();
@@ -88,69 +88,71 @@ namespace CollectionData
             this.dataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
+            this.dataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.Location = new System.Drawing.Point(12, 12);
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.RowTemplate.Height = 23;
             this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView.Size = new System.Drawing.Size(350, 401);
+            this.dataGridView.Size = new System.Drawing.Size(350, 400);
             this.dataGridView.TabIndex = 2;
+            this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellDoubleClick);
             this.dataGridView.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
             // 
-            // checkBox1
+            // showRetroCheckBox
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Checked = true;
-            this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1.Location = new System.Drawing.Point(264, 4);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(84, 16);
-            this.checkBox1.TabIndex = 3;
-            this.checkBox1.Text = "显示改造船";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.showRetroCheckBox.AutoSize = true;
+            this.showRetroCheckBox.Checked = true;
+            this.showRetroCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.showRetroCheckBox.Location = new System.Drawing.Point(264, 4);
+            this.showRetroCheckBox.Name = "showRetroCheckBox";
+            this.showRetroCheckBox.Size = new System.Drawing.Size(84, 16);
+            this.showRetroCheckBox.TabIndex = 3;
+            this.showRetroCheckBox.Text = "显示改造船";
+            this.showRetroCheckBox.UseVisualStyleBackColor = true;
+            this.showRetroCheckBox.CheckedChanged += new System.EventHandler(this.showRetroCheckBox_CheckedChanged);
             // 
-            // radioButton3
+            // showUnownedRadioButton
             // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(121, 3);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(59, 16);
-            this.radioButton3.TabIndex = 2;
-            this.radioButton3.TabStop = true;
-            this.radioButton3.Text = "未拥有";
-            this.radioButton3.UseVisualStyleBackColor = true;
-            this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
+            this.showUnownedRadioButton.AutoSize = true;
+            this.showUnownedRadioButton.Location = new System.Drawing.Point(121, 3);
+            this.showUnownedRadioButton.Name = "showUnownedRadioButton";
+            this.showUnownedRadioButton.Size = new System.Drawing.Size(59, 16);
+            this.showUnownedRadioButton.TabIndex = 2;
+            this.showUnownedRadioButton.TabStop = true;
+            this.showUnownedRadioButton.Text = "未拥有";
+            this.showUnownedRadioButton.UseVisualStyleBackColor = true;
+            this.showUnownedRadioButton.CheckedChanged += new System.EventHandler(this.showUnownedRadioButton_CheckedChanged);
             // 
-            // radioButton2
+            // showOwnedRadioButton
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(56, 3);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(59, 16);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.Text = "已拥有";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            this.showOwnedRadioButton.AutoSize = true;
+            this.showOwnedRadioButton.Location = new System.Drawing.Point(56, 3);
+            this.showOwnedRadioButton.Name = "showOwnedRadioButton";
+            this.showOwnedRadioButton.Size = new System.Drawing.Size(59, 16);
+            this.showOwnedRadioButton.TabIndex = 1;
+            this.showOwnedRadioButton.Text = "已拥有";
+            this.showOwnedRadioButton.UseVisualStyleBackColor = true;
+            this.showOwnedRadioButton.CheckedChanged += new System.EventHandler(this.showOwnedRadioButton_CheckedChanged);
             // 
-            // radioButton1
+            // showAllRadioButton
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(3, 3);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(47, 16);
-            this.radioButton1.TabIndex = 0;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "全部";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            this.showAllRadioButton.AutoSize = true;
+            this.showAllRadioButton.Checked = true;
+            this.showAllRadioButton.Location = new System.Drawing.Point(3, 3);
+            this.showAllRadioButton.Name = "showAllRadioButton";
+            this.showAllRadioButton.Size = new System.Drawing.Size(47, 16);
+            this.showAllRadioButton.TabIndex = 0;
+            this.showAllRadioButton.TabStop = true;
+            this.showAllRadioButton.Text = "全部";
+            this.showAllRadioButton.UseVisualStyleBackColor = true;
+            this.showAllRadioButton.CheckedChanged += new System.EventHandler(this.showAllRadioButton_CheckedChanged);
             // 
             // checkUpdateButton
             // 
             this.checkUpdateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.checkUpdateButton.Location = new System.Drawing.Point(198, 450);
+            this.checkUpdateButton.Location = new System.Drawing.Point(206, 450);
             this.checkUpdateButton.Name = "checkUpdateButton";
             this.checkUpdateButton.Size = new System.Drawing.Size(75, 23);
             this.checkUpdateButton.TabIndex = 5;
@@ -162,10 +164,10 @@ namespace CollectionData
             // 
             this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.panel2.Controls.Add(this.searchTextBox);
-            this.panel2.Controls.Add(this.checkBox1);
-            this.panel2.Controls.Add(this.radioButton1);
-            this.panel2.Controls.Add(this.radioButton3);
-            this.panel2.Controls.Add(this.radioButton2);
+            this.panel2.Controls.Add(this.showRetroCheckBox);
+            this.panel2.Controls.Add(this.showAllRadioButton);
+            this.panel2.Controls.Add(this.showUnownedRadioButton);
+            this.panel2.Controls.Add(this.showOwnedRadioButton);
             this.panel2.Location = new System.Drawing.Point(12, 415);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(350, 29);
@@ -183,19 +185,20 @@ namespace CollectionData
             // 
             this.countTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.countTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.countTextBox.Location = new System.Drawing.Point(68, 450);
+            this.countTextBox.Location = new System.Drawing.Point(39, 455);
             this.countTextBox.Name = "countTextBox";
             this.countTextBox.ReadOnly = true;
-            this.countTextBox.Size = new System.Drawing.Size(100, 14);
+            this.countTextBox.Size = new System.Drawing.Size(72, 14);
             this.countTextBox.TabIndex = 7;
             // 
             // findDropButton
             // 
-            this.findDropButton.Location = new System.Drawing.Point(117, 450);
+            this.findDropButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.findDropButton.Location = new System.Drawing.Point(125, 450);
             this.findDropButton.Name = "findDropButton";
             this.findDropButton.Size = new System.Drawing.Size(75, 23);
             this.findDropButton.TabIndex = 8;
-            this.findDropButton.Text = "button1";
+            this.findDropButton.Text = "查询掉落点";
             this.findDropButton.UseVisualStyleBackColor = true;
             this.findDropButton.Click += new System.EventHandler(this.findDropButton_Click);
             // 
@@ -231,11 +234,11 @@ namespace CollectionData
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button modifyButton;
         private System.Windows.Forms.DataGridView dataGridView;
-        private RadioButton radioButton3;
-        private RadioButton radioButton2;
-        private RadioButton radioButton1;
+        private RadioButton showUnownedRadioButton;
+        private RadioButton showOwnedRadioButton;
+        private RadioButton showAllRadioButton;
         private Button checkUpdateButton;
-        private CheckBox checkBox1;
+        private CheckBox showRetroCheckBox;
         private Panel panel2;
         private WebBrowser webBrowser;
         private TextBox searchTextBox;

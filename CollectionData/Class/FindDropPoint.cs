@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -103,6 +104,22 @@ namespace CollectionData
             }
             foreach (string area in areas)
             {
+                //排除过期的活动图
+                if(area.Length>4)
+                {
+                    Regex reg = new Regex(@"(\d+)_([a-zA-Z]+)_");
+                    Match m = reg.Match(area);
+                    if (m.Success)
+                    {
+                        string dateM = m.Groups[1].Value + m.Groups[2].Value;
+                        int dt = int.Parse(Convert.ToDateTime(dateM).ToString("yyyyMM"));
+                        int dtNow = int.Parse(DateTime.Now.AddDays(-15).ToString("yyyyMM"));
+                        if(dtNow>dt)
+                        {
+                            continue;
+                        }
+                    }
+                }
                 Thread.Sleep(1500);
                 string tmpStr = getDropPoint(area, id);
                 dropPoints += tmpStr.Substring(0, tmpStr.Length - 1) + ";\n";
