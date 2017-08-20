@@ -98,6 +98,7 @@ namespace CollectionData
             }
             if (sizable == "1")
             {
+                this.MaximizeBox = true;
                 this.FormBorderStyle = FormBorderStyle.Sizable;
             }
 
@@ -375,11 +376,14 @@ namespace CollectionData
         #region 自动调整窗口
         private void reSizeColumns()
         {
-            
-            dataGridView.AutoResizeColumns();
+            for (int i = 0; i < dataGridView.Columns.Count - 1; i++)
+            {
+                dataGridView.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridView.AutoResizeColumn(i);
+            }
+            dataGridView.Columns[dataGridView.ColumnCount - 1].Width = 100;
         }
         #endregion
-
         #region 窗体传值
 
         private int cellPos = 0;

@@ -16,7 +16,21 @@ namespace CollectionData
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new mainForm());
+            bool createNew;
+            using (System.Threading.Mutex mutex = new System.Threading.Mutex(true, Application.ProductName, out createNew))
+            {
+                if (createNew)
+                {
+                    Application.Run(new mainForm());
+                }
+                else
+                {
+                    MessageBox.Show("应用程序已经运行！");
+                    System.Threading.Thread.Sleep(1000);
+                    System.Environment.Exit(1);
+                }
+            }
+
         }
     }
 }
