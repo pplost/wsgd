@@ -16,6 +16,7 @@ namespace CollectionData
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            //创建互斥体，禁止多开
             bool createNew;
             using (System.Threading.Mutex mutex = new System.Threading.Mutex(true, Application.ProductName, out createNew))
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace CollectionData
@@ -65,17 +66,8 @@ namespace CollectionData
             checkUpdateFlag = OperateIniFile.iniGetStringValue(configPath, "Settings", "CheckUpdate", "1");
             if (checkUpdateFlag!="0")
             {
-                CheckUpdate c = new CheckUpdate();
-                string newVer = c.getResponse().Trim();
-                if (newVer != "" && newVer != Application.ProductVersion.ToString())
-                {
-                    DialogResult dr = MessageBox.Show("有更新，是否前往更新？", "更新", MessageBoxButtons.OKCancel);
-                    if (dr == DialogResult.OK)
-                    {
-                        System.Diagnostics.Process.Start("http://bbs.nga.cn/read.php?tid=11452817");
-                        this.Close();
-                    }
-                }
+                Thread t1 = new Thread(new ThreadStart(checkingAppUpdate));
+                t1.Start();
             }
             decimal totalCount = 0, ownedCount = 0;
             if (xPoint != -9999 && yPoint != -9999)
@@ -207,7 +199,7 @@ namespace CollectionData
             }
             dv.RowFilter = ownedFilterStr + retrofitedFilterStr + searchFilterStr;
         }
-        //检查更新
+        //检查数据更新
         private void checkUpdateButton_Click(object sender, EventArgs e)
         {
             try
@@ -322,6 +314,7 @@ namespace CollectionData
             //}
         }
 
+        //查询掉落点按钮
         private void findDropButton_Click(object sender, EventArgs e)
         {
             try
@@ -384,6 +377,7 @@ namespace CollectionData
             dataGridView.Columns[dataGridView.ColumnCount - 1].Width = 100;
         }
         #endregion
+
         #region 窗体传值
 
         private int cellPos = 0;
@@ -398,6 +392,10 @@ namespace CollectionData
         {
             int columnIndex = dataGridView.ColumnCount - 1;
             int rowIndex = e.RowIndex;
+            if (rowIndex < 0 || columnIndex < 0) 
+            {
+                return;
+            }
             RemarkForm remarkForm = new RemarkForm();
             remarkForm.Owner = this;
             string inStr = dataGridView.Rows[rowIndex].Cells[columnIndex].Value.ToString();
@@ -407,6 +405,23 @@ namespace CollectionData
             remarkForm.ShowDialog();
         }
 
+        #endregion
+
+        #region 
+        private void checkingAppUpdate()
+        {
+            CheckUpdate c = new CheckUpdate();
+            string newVer = c.getResponse().Trim();
+            if (newVer != "" && newVer != Application.ProductVersion.ToString())
+            {
+                DialogResult dr = MessageBox.Show("有更新，是否前往更新？", "更新", MessageBoxButtons.OKCancel);
+                if (dr == DialogResult.OK)
+                {
+                    System.Diagnostics.Process.Start("http://bbs.nga.cn/read.php?tid=11452817");
+                    System.Environment.Exit(0); 
+                }
+            }
+        }
         #endregion
     }
 }

@@ -83,7 +83,6 @@ namespace CollectionData
             // 
             this.dataGridView.AllowUserToAddRows = false;
             this.dataGridView.AllowUserToDeleteRows = false;
-            this.dataGridView.AllowUserToResizeColumns = false;
             this.dataGridView.AllowUserToResizeRows = false;
             this.dataGridView.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
@@ -184,10 +183,10 @@ namespace CollectionData
             // 
             this.countTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.countTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.countTextBox.Location = new System.Drawing.Point(39, 455);
+            this.countTextBox.Location = new System.Drawing.Point(27, 455);
             this.countTextBox.Name = "countTextBox";
             this.countTextBox.ReadOnly = true;
-            this.countTextBox.Size = new System.Drawing.Size(72, 14);
+            this.countTextBox.Size = new System.Drawing.Size(92, 14);
             this.countTextBox.TabIndex = 7;
             // 
             // findDropButton

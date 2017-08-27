@@ -64,6 +64,7 @@
             this.Controls.Add(this.remarkTextBox);
             this.Name = "RemarkForm";
             this.Text = "备注";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RemarkForm_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.RemarkForm_FormClosed);
             this.Load += new System.EventHandler(this.RemarkForm_Load);
             this.ResumeLayout(false);

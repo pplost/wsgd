@@ -16,8 +16,10 @@ namespace CollectionData
         public RemarkForm()
         {
             InitializeComponent();
+            //设置图标
             this.Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
         }
+        private string preRemark = "";
         public string remarkStr
         {
             get
@@ -29,10 +31,12 @@ namespace CollectionData
                 if (value == null)
                 {
                     remarkTextBox.Text = string.Empty;
+                    preRemark = string.Empty;
                 }
                 else
                 {
                     remarkTextBox.Text = value;
+                    preRemark = value;
                 }
             }
         }
@@ -43,6 +47,7 @@ namespace CollectionData
             string outStr = remarkTextBox.Text;
             outStr = Regex.Replace(outStr, "\r\n", "\t");
             mainForm1.remarkFormString = outStr;
+            preRemark = remarkTextBox.Text;
             this.Close();
         }
         private void RemarkForm_Load(object sender, EventArgs e)
@@ -57,6 +62,7 @@ namespace CollectionData
             }
             this.Width = width;
             this.Height = height;
+            this.remarkTextBox.SelectionStart = this.remarkTextBox.TextLength;
         }
         private void RemarkForm_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -68,6 +74,18 @@ namespace CollectionData
             OperateIniFile.iniWriteValue(configPath, "Settings", "rLocationY", yPoint);
             OperateIniFile.iniWriteValue(configPath, "Settings", "rHeight", height);
             OperateIniFile.iniWriteValue(configPath, "Settings", "rWidth", width);
+        }
+
+        private void RemarkForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (preRemark != remarkTextBox.Text && e.CloseReason == CloseReason.UserClosing)
+            {
+                DialogResult dr=MessageBox.Show("备注有更改，确定要不保存直接退出吗？", "提示", MessageBoxButtons.OKCancel);
+                if(dr==DialogResult.Cancel)
+                {
+                    e.Cancel = true;
+                }
+            }
         }
     }
 }
