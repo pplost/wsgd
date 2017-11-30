@@ -21,6 +21,8 @@ namespace CollectionData
         string dataPath = "Data.wsgd";
         string sizable = "0";
         string checkUpdateFlag = "1";
+        string showRetrofitedFlag = "1";
+        string searchFlag = "2";
         public mainForm()
         {
             InitializeComponent();
@@ -59,39 +61,45 @@ namespace CollectionData
         {
             int xPoint = int.Parse(OperateIniFile.iniGetStringValue(configPath, "Settings", "LocationX", "-9999"));
             int yPoint = int.Parse(OperateIniFile.iniGetStringValue(configPath, "Settings", "LocationY", "-9999"));
-            int showRetrofitedFlag = int.Parse(OperateIniFile.iniGetStringValue(configPath, "Settings", "ShowRetrofitedFlag", "1"));
+            showRetrofitedFlag = OperateIniFile.iniGetStringValue(configPath, "Settings", "ShowRetrofitedFlag", "1");
             sizable = OperateIniFile.iniGetStringValue(configPath, "Settings", "Sizable", "0");
             int height = int.Parse(OperateIniFile.iniGetStringValue(configPath, "Settings", "Height", "520"));
             int width = int.Parse(OperateIniFile.iniGetStringValue(configPath, "Settings", "Width", "800"));
             checkUpdateFlag = OperateIniFile.iniGetStringValue(configPath, "Settings", "CheckUpdate", "1");
-            if (checkUpdateFlag!="0")
+            searchFlag = OperateIniFile.iniGetStringValue(configPath, "Settings", "searchFlag", "2");
+            if (checkUpdateFlag != "0")
             {
+                autoCheckUpdateToolStripMenuItem.Checked = true;
                 Thread t1 = new Thread(new ThreadStart(checkingAppUpdate));
-                t1.Start();
             }
             decimal totalCount = 0, ownedCount = 0;
             if (xPoint != -9999 && yPoint != -9999)
             {
                 this.Location = new Point(xPoint, yPoint);
             }
-            if (showRetrofitedFlag == 1)
+            if (showRetrofitedFlag == "1")
             {
-                showRetroCheckBox.Checked = true;
+                showRetroToolStripMenuItem.Checked = true;
                 retrofitedFilterStr = "";
                 totalCount = dt.Select("IsIgnored = 0 ").Length;
                 ownedCount = dt.Select("IsIgnored = 0 and IsOwned = 1").Length;
             }
             else
             {
-                showRetroCheckBox.Checked = false;
+                showRetroToolStripMenuItem.Checked = false;
                 retrofitedFilterStr = " and IsRetrofited = 0";
                 totalCount = dt.Select("IsIgnored = 0 and IsRetrofited = 0").Length;
                 ownedCount = dt.Select("IsIgnored = 0 and IsRetrofited = 0 and IsOwned = 1").Length;
             }
             if (sizable == "1")
             {
+                sizableToolStripMenuItem.Checked = false;
                 this.MaximizeBox = true;
                 this.FormBorderStyle = FormBorderStyle.Sizable;
+            }
+            else
+            {
+                sizableToolStripMenuItem.Checked = true;
             }
 
             this.Width = width;
@@ -104,6 +112,7 @@ namespace CollectionData
             {
                 countTextBox.Text = "0/0,0%";
             }
+            dv.RowFilter = ownedFilterStr + retrofitedFilterStr + searchFilterStr;
             reSizeColumns();
             dataGridView.AutoResizeRows();
         }
@@ -114,11 +123,11 @@ namespace CollectionData
             string appName = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             string xPoint = this.Location.X.ToString();
             string yPoint = this.Location.Y.ToString();
-            string showRetrofitedFlag = showRetroCheckBox.Checked ? "1" : "0";
             string height = this.Height.ToString();
             string width = this.Width.ToString();
             OperateIniFile.iniWriteValue(configPath, "Settings", "appName", appName);
             OperateIniFile.iniWriteValue(configPath, "Settings", "ShowRetrofitedFlag", showRetrofitedFlag);
+            OperateIniFile.iniWriteValue(configPath, "Settings", "searchFlag", searchFlag);
             OperateIniFile.iniWriteValue(configPath, "Settings", "LocationX", xPoint);
             OperateIniFile.iniWriteValue(configPath, "Settings", "LocationY", yPoint);
             OperateIniFile.iniWriteValue(configPath, "Settings", "Height", height);
@@ -126,9 +135,8 @@ namespace CollectionData
             OperateIniFile.iniWriteValue(configPath, "Settings", "Sizable", sizable);
             OperateIniFile.iniWriteValue(configPath, "Settings", "CheckUpdate", checkUpdateFlag);
             WriteData.reWriteData(dataPath, dt);
-
         }
-        //禁止访问其他网站
+        //禁止跳转到其他网站
         private void webBrowser_Navigated(object sender, WebBrowserNavigatedEventArgs e)
         {
             if (webBrowser.Url.ToString().Contains("js.ntwikis.com"))
@@ -160,34 +168,9 @@ namespace CollectionData
             dv.RowFilter = ownedFilterStr + retrofitedFilterStr + searchFilterStr;
             reSizeColumns();
         }
-        private void showRetroCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            decimal totalCount = 0, ownedCount = 0;
-            if (showRetroCheckBox.Checked)
-            {
-                retrofitedFilterStr = "";
-                totalCount = dt.Select("IsIgnored = 0 ").Length;
-                ownedCount = dt.Select("IsIgnored = 0 and IsOwned = 1").Length;
-            }
-            else
-            {
-                retrofitedFilterStr = " and IsRetrofited = 0";
-                totalCount = dt.Select("IsIgnored = 0 and IsRetrofited = 0").Length;
-                ownedCount = dt.Select("IsIgnored = 0 and IsRetrofited = 0 and IsOwned = 1").Length;
-            }
-            if (totalCount > 0)
-            {
-                countTextBox.Text = ownedCount + "/" + totalCount + "," + Math.Round((ownedCount / totalCount * 100), 2) + "%";
-            }
-            else
-            {
-                countTextBox.Text = "0/0,0%";
-            }
-            dv.RowFilter = ownedFilterStr + retrofitedFilterStr + searchFilterStr;
-            reSizeColumns();
-        }
+
         //搜索
-        private void searchTextBox_TextChanged(object sender, EventArgs e)
+        void searchShip()
         {
             if (searchTextBox.Text.Trim() == "")
             {
@@ -195,51 +178,29 @@ namespace CollectionData
             }
             else
             {
-                searchFilterStr = " and Name like '%" + searchTextBox.Text + "%'";
+                if (searchFlag == "0")
+                {
+                    searchFilterStr = " and ID like '" + searchTextBox.Text + "%'";
+                }
+                else if (searchFlag == "1")
+                {
+                    searchFilterStr = " and Type like '%" + searchTextBox.Text + "%'";
+                }
+                else if (searchFlag == "2")
+                {
+                    searchFilterStr = " and Name like '%" + searchTextBox.Text + "%'";
+                }
+                else if (searchFlag == "3")
+                {
+                    searchFilterStr = " and Remark like '%" + searchTextBox.Text + "%'";
+                }
+
             }
             dv.RowFilter = ownedFilterStr + retrofitedFilterStr + searchFilterStr;
         }
-        //检查数据更新
-        private void checkUpdateButton_Click(object sender, EventArgs e)
+        private void searchTextBox_TextChanged(object sender, EventArgs e)
         {
-            try
-            {
-                CheckDataUpdate cu = new CheckDataUpdate();
-                string re = cu.getResponse();
-                cu.getDataTable();
-                if (cu.compareDiff(ref dt))
-                {
-                    dv.Sort = " ID asc";
-                    decimal totalCount = 0, ownedCount = 0;
-                    if (showRetroCheckBox.Checked)
-                    {
-                        totalCount = dt.Select("IsIgnored = 0 ").Length;
-                        ownedCount = dt.Select("IsIgnored = 0 and IsOwned = 1").Length;
-                    }
-                    else
-                    {
-                        totalCount = dt.Select("IsIgnored = 0 and IsRetrofited = 0").Length;
-                        ownedCount = dt.Select("IsIgnored = 0 and IsRetrofited = 0 and IsOwned = 1").Length;
-                    }
-                    if (totalCount > 0)
-                    {
-                        countTextBox.Text = ownedCount + "/" + totalCount + "," + Math.Round((ownedCount / totalCount * 100), 2) + "%";
-                    }
-                    else
-                    {
-                        countTextBox.Text = "0/0,0%";
-                    }
-                    MessageBox.Show("更新完成！");
-                }
-                else
-                {
-                    MessageBox.Show("无需更新。");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            searchShip();
         }
         //修改
         private void modifyButton_Click(object sender, EventArgs e)
@@ -321,11 +282,11 @@ namespace CollectionData
             {
                 dataGridView.SelectedRows[0].Selected = true;
                 List<int> l = new List<int>();
-                for(int i=1;i< dataGridView.SelectedRows.Count;i++)
+                for (int i = 1; i < dataGridView.SelectedRows.Count; i++)
                 {
                     l.Add(dataGridView.SelectedRows[i].Index);
                 }
-                foreach(int i in l)
+                foreach (int i in l)
                 {
                     dataGridView.Rows[i].Selected = false;
                 }
@@ -392,7 +353,7 @@ namespace CollectionData
         {
             int columnIndex = dataGridView.ColumnCount - 1;
             int rowIndex = e.RowIndex;
-            if (rowIndex < 0 || columnIndex < 0) 
+            if (rowIndex < 0 || columnIndex < 0)
             {
                 return;
             }
@@ -407,7 +368,7 @@ namespace CollectionData
 
         #endregion
 
-        #region 
+        #region 检查程序更新
         private void checkingAppUpdate()
         {
             CheckUpdate c = new CheckUpdate();
@@ -418,9 +379,172 @@ namespace CollectionData
                 if (dr == DialogResult.OK)
                 {
                     System.Diagnostics.Process.Start("http://bbs.nga.cn/read.php?tid=11452817");
-                    System.Environment.Exit(0); 
+                    System.Environment.Exit(0);
                 }
             }
+        }
+        #endregion
+
+        #region 菜单栏
+
+        //退出
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+        //检查更新
+        private void checkUpdateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CheckUpdate c = new CheckUpdate();
+            string newVer = c.getResponse().Trim();
+            if (newVer != "" && newVer != Application.ProductVersion.ToString())
+            {
+                DialogResult dr = MessageBox.Show("有更新，是否前往更新？", "更新", MessageBoxButtons.OKCancel);
+                if (dr == DialogResult.OK)
+                {
+                    System.Diagnostics.Process.Start("http://bbs.nga.cn/read.php?tid=11452817");
+                    System.Environment.Exit(0);
+                }
+            }
+            else
+            {
+                MessageBox.Show("没有发现新版本。", "更新");
+            }
+        }
+        //检查数据更新
+        private void checkDataUpdateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                CheckDataUpdate cu = new CheckDataUpdate();
+                string re = cu.getResponse();
+                cu.getDataTable();
+                if (cu.compareDiff(ref dt))
+                {
+                    dv.Sort = " ID asc";
+                    decimal totalCount = 0, ownedCount = 0;
+                    if (showRetroToolStripMenuItem.Checked)
+                    {
+                        totalCount = dt.Select("IsIgnored = 0 ").Length;
+                        ownedCount = dt.Select("IsIgnored = 0 and IsOwned = 1").Length;
+                    }
+                    else
+                    {
+                        totalCount = dt.Select("IsIgnored = 0 and IsRetrofited = 0").Length;
+                        ownedCount = dt.Select("IsIgnored = 0 and IsRetrofited = 0 and IsOwned = 1").Length;
+                    }
+                    if (totalCount > 0)
+                    {
+                        countTextBox.Text = ownedCount + "/" + totalCount + "," + Math.Round((ownedCount / totalCount * 100), 2) + "%";
+                    }
+                    else
+                    {
+                        countTextBox.Text = "0/0,0%";
+                    }
+                    MessageBox.Show("更新完成！");
+                }
+                else
+                {
+                    MessageBox.Show("无需更新。");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        //筛选ID
+        private void idToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            idToolStripMenuItem.Checked = true;
+            typeToolStripMenuItem.Checked = false;
+            nameToolStripMenuItem.Checked = false;
+            remarkToolStripMenuItem.Checked = false;
+            searchFlag = "0";
+            searchShip();
+        }
+        //筛选类型
+        private void typeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            idToolStripMenuItem.Checked = false;
+            typeToolStripMenuItem.Checked = true;
+            nameToolStripMenuItem.Checked = false;
+            remarkToolStripMenuItem.Checked = false;
+            searchFlag = "1";
+            searchShip();
+        }
+        //筛选名字
+        private void nameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            idToolStripMenuItem.Checked = false;
+            typeToolStripMenuItem.Checked = false;
+            nameToolStripMenuItem.Checked = true;
+            remarkToolStripMenuItem.Checked = false;
+            searchFlag = "2";
+            searchShip();
+        }
+        //筛选备注
+        private void remarkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            idToolStripMenuItem.Checked = false;
+            typeToolStripMenuItem.Checked = false;
+            nameToolStripMenuItem.Checked = false;
+            remarkToolStripMenuItem.Checked = true;
+            searchFlag = "3";
+            searchShip();
+        }
+        //显示改造设置
+        private void showRetroToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            showRetroToolStripMenuItem.Checked = !showRetroToolStripMenuItem.Checked;
+            decimal totalCount = 0, ownedCount = 0;
+            if (showRetroToolStripMenuItem.Checked)
+            {
+                showRetrofitedFlag = "1";
+                retrofitedFilterStr = "";
+                totalCount = dt.Select("IsIgnored = 0 ").Length;
+                ownedCount = dt.Select("IsIgnored = 0 and IsOwned = 1").Length;
+            }
+            else
+            {
+                showRetrofitedFlag = "0";
+                retrofitedFilterStr = " and IsRetrofited = 0";
+                totalCount = dt.Select("IsIgnored = 0 and IsRetrofited = 0").Length;
+                ownedCount = dt.Select("IsIgnored = 0 and IsRetrofited = 0 and IsOwned = 1").Length;
+            }
+            if (totalCount > 0)
+            {
+                countTextBox.Text = ownedCount + "/" + totalCount + "," + Math.Round((ownedCount / totalCount * 100), 2) + "%";
+            }
+            else
+            {
+                countTextBox.Text = "0/0,0%";
+            }
+            dv.RowFilter = ownedFilterStr + retrofitedFilterStr + searchFilterStr;
+            reSizeColumns();
+        }
+        //可调整窗口大小设置
+        private void sizableToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            sizableToolStripMenuItem.Checked = !sizableToolStripMenuItem.Checked;
+            if (sizableToolStripMenuItem.Checked)
+            {
+                sizable = "0";
+                this.MaximizeBox = false;
+                this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            }
+            else
+            {
+                sizable = "1";
+                this.MaximizeBox = true;
+                this.FormBorderStyle = FormBorderStyle.Sizable;
+            }
+        }
+        //自动检查更新设置
+        private void autoCheckUpdateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            autoCheckUpdateToolStripMenuItem.Checked = !autoCheckUpdateToolStripMenuItem.Checked;
+            checkUpdateFlag = autoCheckUpdateToolStripMenuItem.Checked ? "1" : "0";
         }
         #endregion
     }

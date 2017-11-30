@@ -33,18 +33,31 @@ namespace CollectionData
             this.webBrowser = new System.Windows.Forms.WebBrowser();
             this.modifyButton = new System.Windows.Forms.Button();
             this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.showRetroCheckBox = new System.Windows.Forms.CheckBox();
             this.showUnownedRadioButton = new System.Windows.Forms.RadioButton();
             this.showOwnedRadioButton = new System.Windows.Forms.RadioButton();
             this.showAllRadioButton = new System.Windows.Forms.RadioButton();
-            this.checkUpdateButton = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.searchTextBox = new System.Windows.Forms.TextBox();
             this.countTextBox = new System.Windows.Forms.TextBox();
             this.findDropButton = new System.Windows.Forms.Button();
+            this.menuStrip = new System.Windows.Forms.MenuStrip();
+            this.menuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkDataUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.idToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.typeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.remarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showRetroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.sizableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.autoCheckUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.panel2.SuspendLayout();
+            this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -53,9 +66,9 @@ namespace CollectionData
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.webBrowser);
-            this.panel1.Location = new System.Drawing.Point(372, 12);
+            this.panel1.Location = new System.Drawing.Point(372, 27);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(400, 461);
+            this.panel1.Size = new System.Drawing.Size(400, 446);
             this.panel1.TabIndex = 0;
             // 
             // webBrowser
@@ -64,7 +77,7 @@ namespace CollectionData
             this.webBrowser.Location = new System.Drawing.Point(0, 0);
             this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser.Name = "webBrowser";
-            this.webBrowser.Size = new System.Drawing.Size(400, 461);
+            this.webBrowser.Size = new System.Drawing.Size(400, 446);
             this.webBrowser.TabIndex = 0;
             this.webBrowser.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.webBrowser_Navigated);
             // 
@@ -88,28 +101,15 @@ namespace CollectionData
             | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGridView.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView.Location = new System.Drawing.Point(12, 12);
+            this.dataGridView.Location = new System.Drawing.Point(12, 27);
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.RowTemplate.Height = 23;
             this.dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView.Size = new System.Drawing.Size(350, 400);
+            this.dataGridView.Size = new System.Drawing.Size(350, 385);
             this.dataGridView.TabIndex = 2;
             this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellDoubleClick);
             this.dataGridView.SelectionChanged += new System.EventHandler(this.dataGridView1_SelectionChanged);
-            // 
-            // showRetroCheckBox
-            // 
-            this.showRetroCheckBox.AutoSize = true;
-            this.showRetroCheckBox.Checked = true;
-            this.showRetroCheckBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showRetroCheckBox.Location = new System.Drawing.Point(264, 4);
-            this.showRetroCheckBox.Name = "showRetroCheckBox";
-            this.showRetroCheckBox.Size = new System.Drawing.Size(84, 16);
-            this.showRetroCheckBox.TabIndex = 3;
-            this.showRetroCheckBox.Text = "显示改造船";
-            this.showRetroCheckBox.UseVisualStyleBackColor = true;
-            this.showRetroCheckBox.CheckedChanged += new System.EventHandler(this.showRetroCheckBox_CheckedChanged);
             // 
             // showUnownedRadioButton
             // 
@@ -147,22 +147,10 @@ namespace CollectionData
             this.showAllRadioButton.UseVisualStyleBackColor = true;
             this.showAllRadioButton.CheckedChanged += new System.EventHandler(this.showAllRadioButton_CheckedChanged);
             // 
-            // checkUpdateButton
-            // 
-            this.checkUpdateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.checkUpdateButton.Location = new System.Drawing.Point(206, 450);
-            this.checkUpdateButton.Name = "checkUpdateButton";
-            this.checkUpdateButton.Size = new System.Drawing.Size(75, 23);
-            this.checkUpdateButton.TabIndex = 5;
-            this.checkUpdateButton.Text = "检查更新";
-            this.checkUpdateButton.UseVisualStyleBackColor = true;
-            this.checkUpdateButton.Click += new System.EventHandler(this.checkUpdateButton_Click);
-            // 
             // panel2
             // 
             this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.panel2.Controls.Add(this.searchTextBox);
-            this.panel2.Controls.Add(this.showRetroCheckBox);
             this.panel2.Controls.Add(this.showAllRadioButton);
             this.panel2.Controls.Add(this.showUnownedRadioButton);
             this.panel2.Controls.Add(this.showOwnedRadioButton);
@@ -175,7 +163,7 @@ namespace CollectionData
             // 
             this.searchTextBox.Location = new System.Drawing.Point(186, 2);
             this.searchTextBox.Name = "searchTextBox";
-            this.searchTextBox.Size = new System.Drawing.Size(72, 21);
+            this.searchTextBox.Size = new System.Drawing.Size(161, 21);
             this.searchTextBox.TabIndex = 7;
             this.searchTextBox.TextChanged += new System.EventHandler(this.searchTextBox_TextChanged);
             // 
@@ -192,13 +180,126 @@ namespace CollectionData
             // findDropButton
             // 
             this.findDropButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.findDropButton.Location = new System.Drawing.Point(125, 450);
+            this.findDropButton.Location = new System.Drawing.Point(206, 450);
             this.findDropButton.Name = "findDropButton";
             this.findDropButton.Size = new System.Drawing.Size(75, 23);
             this.findDropButton.TabIndex = 8;
             this.findDropButton.Text = "查询掉落点";
             this.findDropButton.UseVisualStyleBackColor = true;
             this.findDropButton.Click += new System.EventHandler(this.findDropButton_Click);
+            // 
+            // menuStrip
+            // 
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuToolStripMenuItem,
+            this.searchToolStripMenuItem,
+            this.settingToolStripMenuItem});
+            this.menuStrip.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(784, 25);
+            this.menuStrip.TabIndex = 9;
+            this.menuStrip.Text = "menuStrip1";
+            // 
+            // menuToolStripMenuItem
+            // 
+            this.menuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.checkUpdateToolStripMenuItem,
+            this.checkDataUpdateToolStripMenuItem,
+            this.exitToolStripMenuItem});
+            this.menuToolStripMenuItem.Name = "menuToolStripMenuItem";
+            this.menuToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.menuToolStripMenuItem.Text = "菜单";
+            // 
+            // checkUpdateToolStripMenuItem
+            // 
+            this.checkUpdateToolStripMenuItem.Name = "checkUpdateToolStripMenuItem";
+            this.checkUpdateToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.checkUpdateToolStripMenuItem.Text = "检查程序更新";
+            this.checkUpdateToolStripMenuItem.Click += new System.EventHandler(this.checkUpdateToolStripMenuItem_Click);
+            // 
+            // checkDataUpdateToolStripMenuItem
+            // 
+            this.checkDataUpdateToolStripMenuItem.Name = "checkDataUpdateToolStripMenuItem";
+            this.checkDataUpdateToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.checkDataUpdateToolStripMenuItem.Text = "检查数据更新";
+            this.checkDataUpdateToolStripMenuItem.Click += new System.EventHandler(this.checkDataUpdateToolStripMenuItem_Click);
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.exitToolStripMenuItem.Text = "退出";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // searchToolStripMenuItem
+            // 
+            this.searchToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.idToolStripMenuItem,
+            this.typeToolStripMenuItem,
+            this.nameToolStripMenuItem,
+            this.remarkToolStripMenuItem});
+            this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
+            this.searchToolStripMenuItem.Size = new System.Drawing.Size(68, 21);
+            this.searchToolStripMenuItem.Text = "搜索内容";
+            // 
+            // idToolStripMenuItem
+            // 
+            this.idToolStripMenuItem.Name = "idToolStripMenuItem";
+            this.idToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.idToolStripMenuItem.Text = "ID";
+            this.idToolStripMenuItem.Click += new System.EventHandler(this.idToolStripMenuItem_Click);
+            // 
+            // typeToolStripMenuItem
+            // 
+            this.typeToolStripMenuItem.Name = "typeToolStripMenuItem";
+            this.typeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.typeToolStripMenuItem.Text = "类型";
+            this.typeToolStripMenuItem.Click += new System.EventHandler(this.typeToolStripMenuItem_Click);
+            // 
+            // nameToolStripMenuItem
+            // 
+            this.nameToolStripMenuItem.Name = "nameToolStripMenuItem";
+            this.nameToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.nameToolStripMenuItem.Text = "名字";
+            this.nameToolStripMenuItem.Click += new System.EventHandler(this.nameToolStripMenuItem_Click);
+            // 
+            // remarkToolStripMenuItem
+            // 
+            this.remarkToolStripMenuItem.Name = "remarkToolStripMenuItem";
+            this.remarkToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.remarkToolStripMenuItem.Text = "备注";
+            this.remarkToolStripMenuItem.Click += new System.EventHandler(this.remarkToolStripMenuItem_Click);
+            // 
+            // settingToolStripMenuItem
+            // 
+            this.settingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.showRetroToolStripMenuItem,
+            this.sizableToolStripMenuItem,
+            this.autoCheckUpdateToolStripMenuItem});
+            this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
+            this.settingToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.settingToolStripMenuItem.Text = "设置";
+            // 
+            // showRetroToolStripMenuItem
+            // 
+            this.showRetroToolStripMenuItem.Name = "showRetroToolStripMenuItem";
+            this.showRetroToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.showRetroToolStripMenuItem.Text = "显示改造";
+            this.showRetroToolStripMenuItem.Click += new System.EventHandler(this.showRetroToolStripMenuItem_Click);
+            // 
+            // sizableToolStripMenuItem
+            // 
+            this.sizableToolStripMenuItem.Name = "sizableToolStripMenuItem";
+            this.sizableToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.sizableToolStripMenuItem.Text = "锁定窗口大小";
+            this.sizableToolStripMenuItem.Click += new System.EventHandler(this.sizableToolStripMenuItem_Click);
+            // 
+            // autoCheckUpdateToolStripMenuItem
+            // 
+            this.autoCheckUpdateToolStripMenuItem.Name = "autoCheckUpdateToolStripMenuItem";
+            this.autoCheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.autoCheckUpdateToolStripMenuItem.Text = "自动检查更新";
+            this.autoCheckUpdateToolStripMenuItem.Click += new System.EventHandler(this.autoCheckUpdateToolStripMenuItem_Click);
             // 
             // mainForm
             // 
@@ -208,11 +309,12 @@ namespace CollectionData
             this.Controls.Add(this.findDropButton);
             this.Controls.Add(this.countTextBox);
             this.Controls.Add(this.panel2);
-            this.Controls.Add(this.checkUpdateButton);
             this.Controls.Add(this.modifyButton);
             this.Controls.Add(this.dataGridView);
             this.Controls.Add(this.panel1);
+            this.Controls.Add(this.menuStrip);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MainMenuStrip = this.menuStrip;
             this.MaximizeBox = false;
             this.Name = "mainForm";
             this.Text = "战舰少女仓库";
@@ -222,6 +324,8 @@ namespace CollectionData
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.menuStrip.ResumeLayout(false);
+            this.menuStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -235,13 +339,25 @@ namespace CollectionData
         private RadioButton showUnownedRadioButton;
         private RadioButton showOwnedRadioButton;
         private RadioButton showAllRadioButton;
-        private Button checkUpdateButton;
-        private CheckBox showRetroCheckBox;
         private Panel panel2;
         private WebBrowser webBrowser;
         private TextBox searchTextBox;
         private TextBox countTextBox;
         private Button findDropButton;
+        private MenuStrip menuStrip;
+        private ToolStripMenuItem menuToolStripMenuItem;
+        private ToolStripMenuItem exitToolStripMenuItem;
+        private ToolStripMenuItem searchToolStripMenuItem;
+        private ToolStripMenuItem settingToolStripMenuItem;
+        private ToolStripMenuItem showRetroToolStripMenuItem;
+        private ToolStripMenuItem sizableToolStripMenuItem;
+        private ToolStripMenuItem autoCheckUpdateToolStripMenuItem;
+        private ToolStripMenuItem checkUpdateToolStripMenuItem;
+        private ToolStripMenuItem idToolStripMenuItem;
+        private ToolStripMenuItem typeToolStripMenuItem;
+        private ToolStripMenuItem nameToolStripMenuItem;
+        private ToolStripMenuItem remarkToolStripMenuItem;
+        private ToolStripMenuItem checkDataUpdateToolStripMenuItem;
     }
 }
 

@@ -92,24 +92,24 @@
     <Compile Include="Class\CheckDataUpdate.cs" />
     <Compile Include="Class\CheckUpdate.cs" />
     <Compile Include="Class\FindDropPoint.cs" />
-    <Compile Include="mainForm.cs">
+    <Compile Include="Frame\mainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="mainForm.Designer.cs">
+    <Compile Include="Frame\mainForm.Designer.cs">
       <DependentUpon>mainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Class\OperateIniFile.cs" />
     <Compile Include="Class\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Class\ReadData.cs" />
-    <Compile Include="RemarkForm.cs">
+    <Compile Include="Frame\RemarkForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RemarkForm.Designer.cs">
+    <Compile Include="Frame\RemarkForm.Designer.cs">
       <DependentUpon>RemarkForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Class\WriteData.cs" />
-    <EmbeddedResource Include="mainForm.resx">
+    <EmbeddedResource Include="Frame\mainForm.resx">
       <DependentUpon>mainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -122,7 +122,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="RemarkForm.resx">
+    <EmbeddedResource Include="Frame\RemarkForm.resx">
       <DependentUpon>RemarkForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />

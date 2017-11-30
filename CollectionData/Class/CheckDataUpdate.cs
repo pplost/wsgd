@@ -77,30 +77,22 @@ namespace CollectionData
         public bool compareDiff(ref DataTable oldTable)
         {
             bool resultFlag = false;
-            if (dt.Rows.Count == oldTable.Rows.Count)
-            {
-                return resultFlag;
-            }
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 bool flag = false;
-                int j = 0, l = i;
-                while (j < oldTable.Rows.Count)
+                for (int j = 0; j < oldTable.Rows.Count; j++)
                 {
-                    if (l >= oldTable.Rows.Count)
-                    {
-                        l = 0;
-                    }
-                    if (dt.Rows[i][0].ToString() == oldTable.Rows[l][0].ToString())
+                    if (dt.Rows[i][0].ToString() == oldTable.Rows[j][0].ToString())
                     {
                         flag = true;
+                        //和谐名字更新
+                        if (dt.Rows[i][2].ToString() != oldTable.Rows[j][2].ToString())
+                        {
+                            oldTable.Rows[j][2] = dt.Rows[i][2].ToString();
+                            resultFlag = true;
+                        }
                         break;
                     }
-                    else
-                    {
-                        l++;
-                    }
-                    j++;
                 }
                 //未找到，则为新行，插入原表
                 if (!flag)
@@ -111,6 +103,7 @@ namespace CollectionData
                     dr[1] = dt.Rows[i][1];
                     dr[2] = dt.Rows[i][2];
                     dr[3] = 0;
+                    //改造
                     if (dr[0].ToString().Trim().Length >= 4 && dr[0].ToString().Substring(0, 1) == "1")
                     {
                         dr[4] = 1;
@@ -119,6 +112,7 @@ namespace CollectionData
                     {
                         dr[4] = 0;
                     }
+                    //非图鉴
                     if ((dr[0].ToString().Trim().Length >= 4 && dr[0].ToString().Substring(0, 1) == "8") || (dr[2].ToString().Trim() == "戈本"))
                     {
                         dr[5] = 1;
@@ -143,7 +137,3 @@ namespace CollectionData
         }
     }
 }
-
-
-
-
