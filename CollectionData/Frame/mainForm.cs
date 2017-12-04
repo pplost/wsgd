@@ -10,7 +10,7 @@ namespace CollectionData
 {
     public partial class mainForm : Form
     {
-        //全局变量
+        #region 全局变量
         DataTable dt;
         DataView dv;
         string ownedFilterStr = "IsIgnored = 0";
@@ -23,6 +23,8 @@ namespace CollectionData
         string checkUpdateFlag = "1";
         string showRetrofitedFlag = "1";
         string searchFlag = "2";
+        #endregion
+
         public mainForm()
         {
             InitializeComponent();
@@ -31,14 +33,16 @@ namespace CollectionData
             initDataGrid();
         }
 
-        //初始化浏览器
+        #region 初始化浏览器
         public void initBrowser()
         {
             //阻止脚本错误提示
             webBrowser.ScriptErrorsSuppressed = true;
             webBrowser.Navigate("http://js.ntwikis.com");
         }
-        //初始化表格
+        #endregion
+
+        #region 初始化表格
         private void initDataGrid()
         {
             dt = ReadData.readData(dataPath);
@@ -56,7 +60,9 @@ namespace CollectionData
                 dataGridView.Columns[i].ReadOnly = true;
             }
         }
-        //窗体载入
+        #endregion
+
+        #region 窗体载入
         private void mainForm_Load(object sender, EventArgs e)
         {
             int xPoint = int.Parse(OperateIniFile.iniGetStringValue(configPath, "Settings", "LocationX", "-9999"));
@@ -71,6 +77,7 @@ namespace CollectionData
             {
                 autoCheckUpdateToolStripMenuItem.Checked = true;
                 Thread t1 = new Thread(new ThreadStart(checkingAppUpdate));
+                t1.Start();
             }
             decimal totalCount = 0, ownedCount = 0;
             if (xPoint != -9999 && yPoint != -9999)
@@ -101,7 +108,22 @@ namespace CollectionData
             {
                 sizableToolStripMenuItem.Checked = true;
             }
-
+            switch (searchFlag)
+            {
+                case "0":
+                    idToolStripMenuItem.Checked = true;
+                    break;
+                case "1":
+                    typeToolStripMenuItem.Checked = true;
+                    break;
+                case "3":
+                    remarkToolStripMenuItem.Checked = true;
+                    break;
+                default:
+                    searchFlag = "2";
+                    nameToolStripMenuItem.Checked = true;
+                    break;
+            }
             this.Width = width;
             this.Height = height;
             if (totalCount > 0)
@@ -116,8 +138,9 @@ namespace CollectionData
             reSizeColumns();
             dataGridView.AutoResizeRows();
         }
+        #endregion
 
-        //窗体退出
+        #region 窗体退出
         private void mainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             string appName = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
@@ -134,9 +157,13 @@ namespace CollectionData
             OperateIniFile.iniWriteValue(configPath, "Settings", "Width", width);
             OperateIniFile.iniWriteValue(configPath, "Settings", "Sizable", sizable);
             OperateIniFile.iniWriteValue(configPath, "Settings", "CheckUpdate", checkUpdateFlag);
+            dv.Sort = "ID asc";
+            dt = dv.ToTable();
             WriteData.reWriteData(dataPath, dt);
         }
-        //禁止跳转到其他网站
+        #endregion
+
+        #region 禁止跳转到其他网站
         private void webBrowser_Navigated(object sender, WebBrowserNavigatedEventArgs e)
         {
             if (webBrowser.Url.ToString().Contains("js.ntwikis.com"))
@@ -148,8 +175,9 @@ namespace CollectionData
                 webBrowser.Url = new Uri(tmpUrl);
             }
         }
+        #endregion
 
-        //更改表格显示内容
+        #region 更改表格显示内容
         private void showAllRadioButton_CheckedChanged(object sender, EventArgs e)
         {
             ownedFilterStr = "IsIgnored = 0";
@@ -168,8 +196,9 @@ namespace CollectionData
             dv.RowFilter = ownedFilterStr + retrofitedFilterStr + searchFilterStr;
             reSizeColumns();
         }
+        #endregion
 
-        //搜索
+        #region 搜索
         void searchShip()
         {
             if (searchTextBox.Text.Trim() == "")
@@ -180,7 +209,16 @@ namespace CollectionData
             {
                 if (searchFlag == "0")
                 {
-                    searchFilterStr = " and ID like '" + searchTextBox.Text + "%'";
+                    try
+                    {
+                        searchFilterStr = " and (ID = '" + int.Parse(searchTextBox.Text) + "' OR ID = '" + (1000 + int.Parse(searchTextBox.Text)) + "')";
+                    }
+                    catch
+                    {
+                        searchTextBox.Text = string.Empty;
+                        MessageBox.Show("ID只能输入数字！");
+                        return;
+                    }
                 }
                 else if (searchFlag == "1")
                 {
@@ -202,7 +240,9 @@ namespace CollectionData
         {
             searchShip();
         }
-        //修改
+        #endregion
+
+        #region 切换按钮
         private void modifyButton_Click(object sender, EventArgs e)
         {
             try
@@ -230,15 +270,15 @@ namespace CollectionData
                 {
                     countTextBox.Text = "0/0,0%";
                 }
-
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+        #endregion
 
-        //页面自动跳转
+        #region 页面自动跳转
         private void dataGridView1_SelectionChanged(object sender, EventArgs e)
         {
             try
@@ -255,12 +295,12 @@ namespace CollectionData
                 //throw ex;
             }
         }
+        #endregion
 
-
-        //测试用
-        delegate void SetTextCallback(string text);
-        private void SetText(string text)
-        {
+        #region 测试用
+        //delegate void SetTextCallback(string text);
+        //private void SetText(string text)
+        //{
             // InvokeRequired required compares the thread ID of the
             // calling thread to the thread ID of the creating thread.
             // If these threads are different, it returns true.
@@ -273,9 +313,10 @@ namespace CollectionData
             //{
             //    this.textBox1.Text = text;
             //}
-        }
+        //}
+        #endregion
 
-        //查询掉落点按钮
+        #region 查询掉落点按钮
         private void findDropButton_Click(object sender, EventArgs e)
         {
             try
@@ -326,6 +367,8 @@ namespace CollectionData
                 throw ex;
             }
         }
+
+        #endregion
 
         #region 自动调整窗口
         private void reSizeColumns()

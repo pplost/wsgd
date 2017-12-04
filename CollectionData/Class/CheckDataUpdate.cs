@@ -128,10 +128,10 @@ namespace CollectionData
             //有更新，则重新排序,并重写配置文件
             if (resultFlag)
             {
-                DataView dv = new DataView(oldTable);
+                DataView dv = oldTable.DefaultView;
                 dv.Sort = "ID asc";
-                oldTable = dv.ToTable();
-                WriteData.reWriteData("Data.wsgd", oldTable);
+                DataTable newTable = dv.ToTable();
+                WriteData.reWriteData("Data.wsgd", newTable);
             }
             return resultFlag;
         }
