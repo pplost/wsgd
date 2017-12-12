@@ -58,6 +58,7 @@ namespace CollectionData
             this.autoCheckUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.errorToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.notInCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkDataUpdateButton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.panel2.SuspendLayout();
@@ -325,11 +326,22 @@ namespace CollectionData
             this.notInCollectionToolStripMenuItem.Text = "显示非图鉴";
             this.notInCollectionToolStripMenuItem.Click += new System.EventHandler(this.notInCollectionToolStripMenuItem_Click);
             // 
+            // checkDataUpdateButton
+            // 
+            this.checkDataUpdateButton.Location = new System.Drawing.Point(125, 450);
+            this.checkDataUpdateButton.Name = "checkDataUpdateButton";
+            this.checkDataUpdateButton.Size = new System.Drawing.Size(75, 23);
+            this.checkDataUpdateButton.TabIndex = 10;
+            this.checkDataUpdateButton.Text = "检查更新";
+            this.checkDataUpdateButton.UseVisualStyleBackColor = true;
+            this.checkDataUpdateButton.Click += new System.EventHandler(this.checkDataUpdateButton_Click);
+            // 
             // mainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 482);
+            this.Controls.Add(this.checkDataUpdateButton);
             this.Controls.Add(this.findDropButton);
             this.Controls.Add(this.countTextBox);
             this.Controls.Add(this.panel2);
@@ -385,6 +397,7 @@ namespace CollectionData
         private ToolStripSeparator toolStripMenuItem1;
         private ToolTip errorToolTip;
         private ToolStripMenuItem notInCollectionToolStripMenuItem;
+        private Button checkDataUpdateButton;
     }
 }
 

@@ -221,44 +221,7 @@ namespace CollectionData
         }
         #endregion
 
-        #region 搜索
-        void searchShip()
-        {
-            if (searchTextBox.Text.Trim() == "")
-            {
-                searchFilterStr = "";
-            }
-            else
-            {
-                if (searchFlag == "0")
-                {
-                    try
-                    {
-                        searchFilterStr = " and (ID = '" + int.Parse(searchTextBox.Text) + "' OR ID = '" + (1000 + int.Parse(searchTextBox.Text)) + "')";
-                    }
-                    catch
-                    {
-                        errorToolTip.Show("ID只能输入数字！", panel2, searchTextBox.Left, searchTextBox.Bottom, 1000);
-                        searchTextBox.Text = "";
-                        return;
-                    }
-                }
-                else if (searchFlag == "1")
-                {
-                    searchFilterStr = " and Type like '%" + searchTextBox.Text + "%'";
-                }
-                else if (searchFlag == "2")
-                {
-                    searchFilterStr = " and Name like '%" + searchTextBox.Text + "%'";
-                }
-                else if (searchFlag == "3")
-                {
-                    searchFilterStr = " and Remark like '%" + searchTextBox.Text + "%'";
-                }
-
-            }
-            dv.RowFilter = ignoreFilterStr + ownedFilterStr + retrofitedFilterStr + searchFilterStr;
-        }
+        #region 搜索框
         private void searchTextBox_TextChanged(object sender, EventArgs e)
         {
             searchShip();
@@ -339,6 +302,13 @@ namespace CollectionData
         //}
         #endregion
 
+        #region 检查更新按钮
+        private void checkDataUpdateButton_Click(object sender, EventArgs e)
+        {
+            checkDataUpdate();
+        }
+        #endregion
+
         #region 查询掉落点按钮
         private void findDropButton_Click(object sender, EventArgs e)
         {
@@ -393,18 +363,6 @@ namespace CollectionData
 
         #endregion
 
-        #region 自动调整窗口
-        private void reSizeColumns()
-        {
-            for (int i = 0; i < dataGridView.Columns.Count - 1; i++)
-            {
-                dataGridView.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-                dataGridView.AutoResizeColumn(i);
-            }
-            dataGridView.Columns[dataGridView.ColumnCount - 1].Width = 100;
-        }
-        #endregion
-
         #region 窗体传值
 
         private int cellPos = 0;
@@ -456,7 +414,7 @@ namespace CollectionData
         //退出
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            this.Close();
+            System.Environment.Exit(0);
         }
         //检查更新
         private void checkUpdateToolStripMenuItem_Click(object sender, EventArgs e)
@@ -480,44 +438,7 @@ namespace CollectionData
         //检查数据更新
         private void checkDataUpdateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            try
-            {
-                CheckDataUpdate cu = new CheckDataUpdate();
-                string re = cu.getResponse();
-                cu.getDataTable();
-                if (cu.compareDiff(ref dt))
-                {
-                    dv.Sort = " ID asc";
-                    decimal totalCount = 0, ownedCount = 0;
-                    if (showRetroToolStripMenuItem.Checked)
-                    {
-                        totalCount = dt.Select("IsIgnored = 0 ").Length;
-                        ownedCount = dt.Select("IsIgnored = 0 and IsOwned = 1").Length;
-                    }
-                    else
-                    {
-                        totalCount = dt.Select("IsIgnored = 0 and IsRetrofited = 0").Length;
-                        ownedCount = dt.Select("IsIgnored = 0 and IsRetrofited = 0 and IsOwned = 1").Length;
-                    }
-                    if (totalCount > 0)
-                    {
-                        countTextBox.Text = ownedCount + "/" + totalCount + "," + Math.Round((ownedCount / totalCount * 100), 2) + "%";
-                    }
-                    else
-                    {
-                        countTextBox.Text = "0/0,0%";
-                    }
-                    MessageBox.Show("更新完成！");
-                }
-                else
-                {
-                    MessageBox.Show("无需更新。");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            checkDataUpdate();
         }
         //筛选ID
         private void idToolStripMenuItem_Click(object sender, EventArgs e)
@@ -629,6 +550,101 @@ namespace CollectionData
         {
             autoCheckUpdateToolStripMenuItem.Checked = !autoCheckUpdateToolStripMenuItem.Checked;
             checkUpdateFlag = autoCheckUpdateToolStripMenuItem.Checked ? "1" : "0";
+        }
+        #endregion
+
+        #region 方法
+        //自动调整窗口
+        private void reSizeColumns()
+        {
+            for (int i = 0; i < dataGridView.Columns.Count - 1; i++)
+            {
+                dataGridView.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+                dataGridView.AutoResizeColumn(i);
+            }
+            dataGridView.Columns[dataGridView.ColumnCount - 1].Width = 100;
+        }
+
+        //检查数据更新
+        private void checkDataUpdate()
+        {
+            try
+            {
+                CheckDataUpdate cu = new CheckDataUpdate();
+                string re = cu.getResponse();
+                cu.getDataTable();
+                if (cu.compareDiff(ref dt))
+                {
+                    dv.Sort = " ID asc";
+                    decimal totalCount = 0, ownedCount = 0;
+                    if (showRetroToolStripMenuItem.Checked)
+                    {
+                        totalCount = dt.Select("IsIgnored = 0 ").Length;
+                        ownedCount = dt.Select("IsIgnored = 0 and IsOwned = 1").Length;
+                    }
+                    else
+                    {
+                        totalCount = dt.Select("IsIgnored = 0 and IsRetrofited = 0").Length;
+                        ownedCount = dt.Select("IsIgnored = 0 and IsRetrofited = 0 and IsOwned = 1").Length;
+                    }
+                    if (totalCount > 0)
+                    {
+                        countTextBox.Text = ownedCount + "/" + totalCount + "," + Math.Round((ownedCount / totalCount * 100), 2) + "%";
+                    }
+                    else
+                    {
+                        countTextBox.Text = "0/0,0%";
+                    }
+                    MessageBox.Show("更新完成！");
+                }
+                else
+                {
+                    MessageBox.Show("无需更新。");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        //搜索
+        private void searchShip()
+        {
+            if (searchTextBox.Text.Trim() == "")
+            {
+                searchFilterStr = "";
+            }
+            else
+            {
+                if (searchFlag == "0")
+                {
+                    try
+                    {
+                        searchFilterStr = " and (ID = '" + int.Parse(searchTextBox.Text) + "' OR ID = '" + (1000 + int.Parse(searchTextBox.Text)) + "')";
+                    }
+                    catch
+                    {
+                        errorToolTip.Show("ID只能输入数字！", panel2, searchTextBox.Left, searchTextBox.Bottom, 1000);
+                        searchTextBox.Text = "";
+                        return;
+                    }
+                }
+                else if (searchFlag == "1")
+                {
+                    searchFilterStr = " and Type like '%" + searchTextBox.Text + "%'";
+                }
+                else if (searchFlag == "2")
+                {
+                    searchFilterStr = " and Name like '%" + searchTextBox.Text + "%'";
+                }
+                else if (searchFlag == "3")
+                {
+                    searchFilterStr = " and Remark like '%" + searchTextBox.Text + "%'";
+                }
+
+            }
+            dv.RowFilter = ignoreFilterStr + ownedFilterStr + retrofitedFilterStr + searchFilterStr;
         }
         #endregion
     }
