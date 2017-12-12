@@ -13,18 +13,21 @@ namespace CollectionData
         #region 全局变量
         DataTable dt;
         DataView dv;
-        string ownedFilterStr = "IsIgnored = 0";
+        string ignoreFilterStr = "IsIgnored = 0";
+        string ownedFilterStr = "";
         string retrofitedFilterStr = " and IsRetrofited = 0";
         string searchFilterStr = "";
         string tmpUrl = "";
         string configPath = Application.StartupPath + "\\config.ini";
         string dataPath = "Data.wsgd";
         string sizable = "0";
+        string ignoreFlag = "0";
         string checkUpdateFlag = "1";
         string showRetrofitedFlag = "1";
         string searchFlag = "2";
         #endregion
 
+        #region 窗体
         public mainForm()
         {
             InitializeComponent();
@@ -32,6 +35,7 @@ namespace CollectionData
             initBrowser();
             initDataGrid();
         }
+        #endregion
 
         #region 初始化浏览器
         public void initBrowser()
@@ -47,7 +51,6 @@ namespace CollectionData
         {
             dt = ReadData.readData(dataPath);
             dv = dt.DefaultView;
-            dv.RowFilter = "IsIgnored=0";
             dataGridView.DataSource = dv;
             dataGridView.Columns[1].HeaderText = "类型";
             dataGridView.Columns[2].HeaderText = "名字";
@@ -69,6 +72,7 @@ namespace CollectionData
             int yPoint = int.Parse(OperateIniFile.iniGetStringValue(configPath, "Settings", "LocationY", "-9999"));
             showRetrofitedFlag = OperateIniFile.iniGetStringValue(configPath, "Settings", "ShowRetrofitedFlag", "1");
             sizable = OperateIniFile.iniGetStringValue(configPath, "Settings", "Sizable", "0");
+            ignoreFlag = OperateIniFile.iniGetStringValue(configPath, "Settings", "ignoreFlag", "0");
             int height = int.Parse(OperateIniFile.iniGetStringValue(configPath, "Settings", "Height", "520"));
             int width = int.Parse(OperateIniFile.iniGetStringValue(configPath, "Settings", "Width", "800"));
             checkUpdateFlag = OperateIniFile.iniGetStringValue(configPath, "Settings", "CheckUpdate", "1");
@@ -108,6 +112,15 @@ namespace CollectionData
             {
                 sizableToolStripMenuItem.Checked = true;
             }
+            if (ignoreFlag == "1")
+            {
+                ignoreFilterStr = "1=1";
+                sizableToolStripMenuItem.Checked = true;
+            }
+            else
+            {
+                ignoreFilterStr = "IsIgnored=0";
+            }
             switch (searchFlag)
             {
                 case "0":
@@ -134,7 +147,7 @@ namespace CollectionData
             {
                 countTextBox.Text = "0/0,0%";
             }
-            dv.RowFilter = ownedFilterStr + retrofitedFilterStr + searchFilterStr;
+            dv.RowFilter = ignoreFilterStr + ownedFilterStr + retrofitedFilterStr + searchFilterStr;
             reSizeColumns();
             dataGridView.AutoResizeRows();
         }
@@ -156,10 +169,20 @@ namespace CollectionData
             OperateIniFile.iniWriteValue(configPath, "Settings", "Height", height);
             OperateIniFile.iniWriteValue(configPath, "Settings", "Width", width);
             OperateIniFile.iniWriteValue(configPath, "Settings", "Sizable", sizable);
+            OperateIniFile.iniWriteValue(configPath, "Settings", "ignoreFlag", ignoreFlag);
             OperateIniFile.iniWriteValue(configPath, "Settings", "CheckUpdate", checkUpdateFlag);
-            dv.Sort = "ID asc";
-            dt = dv.ToTable();
-            WriteData.reWriteData(dataPath, dt);
+            //dataview转换有卡顿，弃用
+            //dv.RowFilter = "";
+            //dv.Sort = "ID asc";
+            //dt = dv.ToTable();
+            DataTable dtNew = dt.Clone();
+            DataRow[] drs = dt.Select("1=1", "ID asc");
+            for (int i = 0; i < drs.Length; i++)
+            {
+                dtNew.Rows.Add(drs[i].ItemArray);
+            }
+            WriteData.reWriteData(dataPath, dtNew);
+            System.Environment.Exit(0);
         }
         #endregion
 
@@ -180,20 +203,20 @@ namespace CollectionData
         #region 更改表格显示内容
         private void showAllRadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            ownedFilterStr = "IsIgnored = 0";
-            dv.RowFilter = ownedFilterStr + retrofitedFilterStr + searchFilterStr;
+            ownedFilterStr = "";
+            dv.RowFilter = ignoreFilterStr + ownedFilterStr + retrofitedFilterStr + searchFilterStr;
             reSizeColumns();
         }
         private void showOwnedRadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            ownedFilterStr = "IsIgnored = 0 and IsOwned = 1";
-            dv.RowFilter = ownedFilterStr + retrofitedFilterStr + searchFilterStr;
+            ownedFilterStr = " and IsOwned = 1";
+            dv.RowFilter = ignoreFilterStr + ownedFilterStr + retrofitedFilterStr + searchFilterStr;
             reSizeColumns();
         }
         private void showUnownedRadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            ownedFilterStr = "IsIgnored = 0 and IsOwned = 0";
-            dv.RowFilter = ownedFilterStr + retrofitedFilterStr + searchFilterStr;
+            ownedFilterStr = " and IsOwned = 0";
+            dv.RowFilter = ignoreFilterStr + ownedFilterStr + retrofitedFilterStr + searchFilterStr;
             reSizeColumns();
         }
         #endregion
@@ -215,8 +238,8 @@ namespace CollectionData
                     }
                     catch
                     {
-                        searchTextBox.Text = string.Empty;
-                        MessageBox.Show("ID只能输入数字！");
+                        errorToolTip.Show("ID只能输入数字！", panel2, searchTextBox.Left, searchTextBox.Bottom, 1000);
+                        searchTextBox.Text = "";
                         return;
                     }
                 }
@@ -234,7 +257,7 @@ namespace CollectionData
                 }
 
             }
-            dv.RowFilter = ownedFilterStr + retrofitedFilterStr + searchFilterStr;
+            dv.RowFilter = ignoreFilterStr + ownedFilterStr + retrofitedFilterStr + searchFilterStr;
         }
         private void searchTextBox_TextChanged(object sender, EventArgs e)
         {
@@ -301,18 +324,18 @@ namespace CollectionData
         //delegate void SetTextCallback(string text);
         //private void SetText(string text)
         //{
-            // InvokeRequired required compares the thread ID of the
-            // calling thread to the thread ID of the creating thread.
-            // If these threads are different, it returns true.
-            //if (this.textBox1.InvokeRequired)
-            //{
-            //    SetTextCallback d = new SetTextCallback(SetText);
-            //    this.Invoke(d, new object[] { text });
-            //}
-            //else
-            //{
-            //    this.textBox1.Text = text;
-            //}
+        // InvokeRequired required compares the thread ID of the
+        // calling thread to the thread ID of the creating thread.
+        // If these threads are different, it returns true.
+        //if (this.textBox1.InvokeRequired)
+        //{
+        //    SetTextCallback d = new SetTextCallback(SetText);
+        //    this.Invoke(d, new object[] { text });
+        //}
+        //else
+        //{
+        //    this.textBox1.Text = text;
+        //}
         //}
         #endregion
 
@@ -563,8 +586,26 @@ namespace CollectionData
             {
                 countTextBox.Text = "0/0,0%";
             }
-            dv.RowFilter = ownedFilterStr + retrofitedFilterStr + searchFilterStr;
+            dv.RowFilter = ignoreFilterStr + ownedFilterStr + retrofitedFilterStr + searchFilterStr;
             reSizeColumns();
+        }
+        //显示非图鉴
+        private void notInCollectionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            notInCollectionToolStripMenuItem.Checked = !notInCollectionToolStripMenuItem.Checked;
+            if (notInCollectionToolStripMenuItem.Checked)
+            {
+                ignoreFlag = "1";
+                ignoreFilterStr = "1=1";
+            }
+            else
+            {
+                ignoreFlag = "0";
+                ignoreFilterStr = "IsIgnored = 0";
+            }
+            dv.RowFilter = ignoreFilterStr + ownedFilterStr + retrofitedFilterStr + searchFilterStr;
+            reSizeColumns();
+
         }
         //可调整窗口大小设置
         private void sizableToolStripMenuItem_Click(object sender, EventArgs e)

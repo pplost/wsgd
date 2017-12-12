@@ -88,6 +88,7 @@ namespace CollectionData
                         //和谐名字更新
                         if (dt.Rows[i][2].ToString() != oldTable.Rows[j][2].ToString())
                         {
+                            oldTable.Rows[j][1] = dt.Rows[i][1].ToString();
                             oldTable.Rows[j][2] = dt.Rows[i][2].ToString();
                             resultFlag = true;
                         }

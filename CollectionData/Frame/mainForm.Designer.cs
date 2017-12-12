@@ -29,6 +29,7 @@ namespace CollectionData
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
             this.webBrowser = new System.Windows.Forms.WebBrowser();
             this.modifyButton = new System.Windows.Forms.Button();
@@ -44,6 +45,7 @@ namespace CollectionData
             this.menuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkDataUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.idToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,6 +56,8 @@ namespace CollectionData
             this.showRetroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sizableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoCheckUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.errorToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.notInCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.panel2.SuspendLayout();
@@ -205,6 +209,7 @@ namespace CollectionData
             this.menuToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.checkUpdateToolStripMenuItem,
             this.checkDataUpdateToolStripMenuItem,
+            this.toolStripMenuItem1,
             this.exitToolStripMenuItem});
             this.menuToolStripMenuItem.Name = "menuToolStripMenuItem";
             this.menuToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
@@ -223,6 +228,11 @@ namespace CollectionData
             this.checkDataUpdateToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.checkDataUpdateToolStripMenuItem.Text = "检查数据更新";
             this.checkDataUpdateToolStripMenuItem.Click += new System.EventHandler(this.checkDataUpdateToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(145, 6);
             // 
             // exitToolStripMenuItem
             // 
@@ -245,7 +255,7 @@ namespace CollectionData
             // idToolStripMenuItem
             // 
             this.idToolStripMenuItem.Name = "idToolStripMenuItem";
-            this.idToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.idToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.idToolStripMenuItem.Text = "ID";
             this.idToolStripMenuItem.Click += new System.EventHandler(this.idToolStripMenuItem_Click);
             // 
@@ -275,7 +285,8 @@ namespace CollectionData
             this.settingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showRetroToolStripMenuItem,
             this.sizableToolStripMenuItem,
-            this.autoCheckUpdateToolStripMenuItem});
+            this.autoCheckUpdateToolStripMenuItem,
+            this.notInCollectionToolStripMenuItem});
             this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
             this.settingToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
             this.settingToolStripMenuItem.Text = "设置";
@@ -283,23 +294,36 @@ namespace CollectionData
             // showRetroToolStripMenuItem
             // 
             this.showRetroToolStripMenuItem.Name = "showRetroToolStripMenuItem";
-            this.showRetroToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.showRetroToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.showRetroToolStripMenuItem.Text = "显示改造";
             this.showRetroToolStripMenuItem.Click += new System.EventHandler(this.showRetroToolStripMenuItem_Click);
             // 
             // sizableToolStripMenuItem
             // 
             this.sizableToolStripMenuItem.Name = "sizableToolStripMenuItem";
-            this.sizableToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.sizableToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.sizableToolStripMenuItem.Text = "锁定窗口大小";
             this.sizableToolStripMenuItem.Click += new System.EventHandler(this.sizableToolStripMenuItem_Click);
             // 
             // autoCheckUpdateToolStripMenuItem
             // 
             this.autoCheckUpdateToolStripMenuItem.Name = "autoCheckUpdateToolStripMenuItem";
-            this.autoCheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.autoCheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.autoCheckUpdateToolStripMenuItem.Text = "自动检查更新";
             this.autoCheckUpdateToolStripMenuItem.Click += new System.EventHandler(this.autoCheckUpdateToolStripMenuItem_Click);
+            // 
+            // errorToolTip
+            // 
+            this.errorToolTip.AutoPopDelay = 5000;
+            this.errorToolTip.InitialDelay = 500;
+            this.errorToolTip.ReshowDelay = 100;
+            // 
+            // notInCollectionToolStripMenuItem
+            // 
+            this.notInCollectionToolStripMenuItem.Name = "notInCollectionToolStripMenuItem";
+            this.notInCollectionToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.notInCollectionToolStripMenuItem.Text = "显示非图鉴";
+            this.notInCollectionToolStripMenuItem.Click += new System.EventHandler(this.notInCollectionToolStripMenuItem_Click);
             // 
             // mainForm
             // 
@@ -358,6 +382,9 @@ namespace CollectionData
         private ToolStripMenuItem nameToolStripMenuItem;
         private ToolStripMenuItem remarkToolStripMenuItem;
         private ToolStripMenuItem checkDataUpdateToolStripMenuItem;
+        private ToolStripSeparator toolStripMenuItem1;
+        private ToolTip errorToolTip;
+        private ToolStripMenuItem notInCollectionToolStripMenuItem;
     }
 }
 
