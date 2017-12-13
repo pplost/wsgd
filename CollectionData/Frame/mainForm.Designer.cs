@@ -56,8 +56,8 @@ namespace CollectionData
             this.showRetroToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sizableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autoCheckUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.errorToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.notInCollectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.errorToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.checkDataUpdateButton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
@@ -256,28 +256,28 @@ namespace CollectionData
             // idToolStripMenuItem
             // 
             this.idToolStripMenuItem.Name = "idToolStripMenuItem";
-            this.idToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.idToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.idToolStripMenuItem.Text = "ID";
             this.idToolStripMenuItem.Click += new System.EventHandler(this.idToolStripMenuItem_Click);
             // 
             // typeToolStripMenuItem
             // 
             this.typeToolStripMenuItem.Name = "typeToolStripMenuItem";
-            this.typeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.typeToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.typeToolStripMenuItem.Text = "类型";
             this.typeToolStripMenuItem.Click += new System.EventHandler(this.typeToolStripMenuItem_Click);
             // 
             // nameToolStripMenuItem
             // 
             this.nameToolStripMenuItem.Name = "nameToolStripMenuItem";
-            this.nameToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.nameToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.nameToolStripMenuItem.Text = "名字";
             this.nameToolStripMenuItem.Click += new System.EventHandler(this.nameToolStripMenuItem_Click);
             // 
             // remarkToolStripMenuItem
             // 
             this.remarkToolStripMenuItem.Name = "remarkToolStripMenuItem";
-            this.remarkToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.remarkToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.remarkToolStripMenuItem.Text = "备注";
             this.remarkToolStripMenuItem.Click += new System.EventHandler(this.remarkToolStripMenuItem_Click);
             // 
@@ -295,23 +295,30 @@ namespace CollectionData
             // showRetroToolStripMenuItem
             // 
             this.showRetroToolStripMenuItem.Name = "showRetroToolStripMenuItem";
-            this.showRetroToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.showRetroToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.showRetroToolStripMenuItem.Text = "显示改造";
             this.showRetroToolStripMenuItem.Click += new System.EventHandler(this.showRetroToolStripMenuItem_Click);
             // 
             // sizableToolStripMenuItem
             // 
             this.sizableToolStripMenuItem.Name = "sizableToolStripMenuItem";
-            this.sizableToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.sizableToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.sizableToolStripMenuItem.Text = "锁定窗口大小";
             this.sizableToolStripMenuItem.Click += new System.EventHandler(this.sizableToolStripMenuItem_Click);
             // 
             // autoCheckUpdateToolStripMenuItem
             // 
             this.autoCheckUpdateToolStripMenuItem.Name = "autoCheckUpdateToolStripMenuItem";
-            this.autoCheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.autoCheckUpdateToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.autoCheckUpdateToolStripMenuItem.Text = "自动检查更新";
             this.autoCheckUpdateToolStripMenuItem.Click += new System.EventHandler(this.autoCheckUpdateToolStripMenuItem_Click);
+            // 
+            // notInCollectionToolStripMenuItem
+            // 
+            this.notInCollectionToolStripMenuItem.Name = "notInCollectionToolStripMenuItem";
+            this.notInCollectionToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.notInCollectionToolStripMenuItem.Text = "显示非图鉴";
+            this.notInCollectionToolStripMenuItem.Click += new System.EventHandler(this.notInCollectionToolStripMenuItem_Click);
             // 
             // errorToolTip
             // 
@@ -319,15 +326,9 @@ namespace CollectionData
             this.errorToolTip.InitialDelay = 500;
             this.errorToolTip.ReshowDelay = 100;
             // 
-            // notInCollectionToolStripMenuItem
-            // 
-            this.notInCollectionToolStripMenuItem.Name = "notInCollectionToolStripMenuItem";
-            this.notInCollectionToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.notInCollectionToolStripMenuItem.Text = "显示非图鉴";
-            this.notInCollectionToolStripMenuItem.Click += new System.EventHandler(this.notInCollectionToolStripMenuItem_Click);
-            // 
             // checkDataUpdateButton
             // 
+            this.checkDataUpdateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkDataUpdateButton.Location = new System.Drawing.Point(125, 450);
             this.checkDataUpdateButton.Name = "checkDataUpdateButton";
             this.checkDataUpdateButton.Size = new System.Drawing.Size(75, 23);

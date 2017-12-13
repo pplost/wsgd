@@ -84,7 +84,9 @@ namespace CollectionData
                 t1.Start();
             }
             decimal totalCount = 0, ownedCount = 0;
-            if (xPoint != -9999 && yPoint != -9999)
+            //分辨率
+            Rectangle rec = Screen.GetWorkingArea(this);
+            if (xPoint >= (-width + 50) && yPoint >= (-height + 50) && xPoint < (rec.Width - 50) && yPoint < (rec.Height - 50))
             {
                 this.Location = new Point(xPoint, yPoint);
             }
